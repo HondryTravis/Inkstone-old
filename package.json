@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "private": true,
+  "description": "simple online rich text editor, easy to extend. Built on native TypeScript",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HondryTravis/Inkstone.git"
+  },
+  "keywords": [],
+  "author": "travis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HondryTravis/Inkstone/issues"
+  },
+  "homepage": "https://github.com/HondryTravis/Inkstone#readme",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+  }
+}

@@ -1,0 +1,51 @@
+Arguments: 
+  /Users/hondry/.nvm/versions/node/v10.23.0/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js set version berry
+
+PATH: 
+  /Users/hondry/.nvm/versions/node/v10.23.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/hondry/.nvm/versions/node/v10.23.0/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  10.23.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: connect ECONNREFUSED 0.0.0.0:443
+      at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1107:14)
+
+npm manifest: 
+  {
+    "version": "1.0.0",
+    "private": true,
+    "description": "simple online rich text editor, easy to extend. Built on native TypeScript",
+    "main": "",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/HondryTravis/Inkstone.git"
+    },
+    "keywords": [],
+    "author": "travis",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/HondryTravis/Inkstone/issues"
+    },
+    "homepage": "https://github.com/HondryTravis/Inkstone#readme",
+    "workspaces": [
+      "packages/*"
+    ],
+    "devDependencies": {
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
