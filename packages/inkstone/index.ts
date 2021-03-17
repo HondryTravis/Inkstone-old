@@ -1,4 +1,4 @@
-const InkStone = 'hellow inkstone';
+const InkStone = 'hello inkstone';
 
 export {
   InkStone
