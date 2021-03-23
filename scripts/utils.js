@@ -34,14 +34,11 @@ exports.fuzzyMatchTarget = (partialTargets, includeAllMatching) => {
   if (matched.length) {
     return matched
   } else {
-    console.log()
     console.error(
       `  ${chalk.bgRed.white(' ERROR ')} ${chalk.red(
         `Target ${chalk.underline(partialTargets)} not found!`
       )}`
     )
-    console.log()
-
     process.exit(1)
   }
 }
