@@ -2,11 +2,13 @@
   "name": "inkstone",
   "version": "0.0.0",
   "description": "simple rich text editor, easy to extend. Built with TypeScript",
-  "main": "lib/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+  }
 }

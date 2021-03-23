@@ -8,7 +8,7 @@ interface IContainer {
   instance?: {}
 }
 
-export class Container {
+export default class Container {
   private container: Map<PropertyKey, IContainer>
   constructor() {
       this.container = new Map<string, IContainer>()
@@ -30,5 +30,6 @@ export class Container {
   }
   restore(key: string) {
       this.container.delete(key)
+      console.log(2222);
   }
 }

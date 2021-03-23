@@ -2,9 +2,24 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node scripts/dev.js",
+    "build": "node scripts/build.js"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "brotli": "^1.3.2",
+    "chalk": "^4.1.0",
+    "execa": "^5.0.0",
+    "minimist": "^1.2.5",
+    "rollup": "^2.42.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "typescript": "^4.2.3",
+    "zlib": "^1.0.5"
+  }
 }

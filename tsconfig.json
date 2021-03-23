@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["DOM","ESNext"],
+    "target": "ESNext",
+    "outDir": "dist",
+    "allowJs": false,
+    "sourceMap": false,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "packages/*/src"
+  ]
+}
