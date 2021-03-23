@@ -30,6 +30,5 @@ export default class Container {
   }
   restore(key: string) {
       this.container.delete(key)
-      console.log(2222);
   }
 }
