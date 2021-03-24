@@ -1,7 +1,7 @@
 import path from 'path'
 import typescript from 'rollup-plugin-typescript2'
 import chalk from 'chalk'
-
+import nodeResolve from '@rollup/plugin-node-resolve'
 
 
 const version = require('./package.json').version
@@ -16,7 +16,7 @@ const OUTPUT_CJS = 'cjs';
 const OUTPUT_IIFE = 'iife';
 const OUTPUT_ES = 'es';
 const OUTPUT_UMD = 'umd';
-const entryFile = './src/Main.ts'
+const entryFile = './src/index.ts'
 
 const outputConfigs = {
   [OUTPUT_UMD]: {
@@ -38,7 +38,7 @@ const outputConfigs = {
 }
 
 
-const defaultFormats = [OUTPUT_CJS, OUTPUT_IIFE]
+const defaultFormats = [OUTPUT_CJS, OUTPUT_ES]
 const inlineFormats = process.env.FORMATS && process.env.FORMATS.split(',')
 const packageFormats = inlineFormats || packageOptions.formats || defaultFormats
 const packageConfigs = process.env.PROD_ONLY
@@ -67,21 +67,37 @@ function createConfig(format, output, plugins = []) {
     process.exit(1)
   }
   output.sourcemap = !!process.env.SOURCE_MAP
-  output.name = name
+
+
+
+  if(format === OUTPUT_IIFE) {
+    output.name = packageOptions.name
+  }
+
+
+  const extensions = ['.ts']
+  // 暂时不构建声明文件
+  // const noDeclaration = format === 'es' ? true : false
+  const noDeclaration = false
 
   const tsProject = typescript({
     tsconfig: path.resolve(__dirname, 'tsconfig.json'),
     tsconfigOverride: {
       compilerOptions: {
         sourceMap: output.sourcemap,
+        declaration: noDeclaration
       }
     }
   })
+
   return {
     input: resolve(entryFile),
     plugins: [
+      nodeResolve({
+        extensions
+      }),
       tsProject,
-      ...plugins
+      ...plugins,
     ],
     output
   }

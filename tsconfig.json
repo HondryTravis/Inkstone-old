@@ -2,10 +2,16 @@
   "compilerOptions": {
     "lib": ["DOM","ESNext"],
     "target": "ESNext",
-    "outDir": "dist",
     "allowJs": false,
     "sourceMap": false,
-    "experimentalDecorators": true
+    "declaration": true,
+    "declarationDir": "types",
+    "experimentalDecorators": true,
+    "moduleResolution":"node",
+    "baseUrl": ".",
+    "paths":{
+      "@inkstone/*": ["packages/*/src"]
+    }
   },
   "include": [
     "packages/*/src"

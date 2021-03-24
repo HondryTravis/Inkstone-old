@@ -3,12 +3,19 @@
   "version": "0.0.0",
   "description": "simple rich text editor, easy to extend. Built with TypeScript",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "buildOptions": {
+    "name": "Inkstone",
+    "formats": [
+      "es",
+      "cjs",
+      "iife"
+    ]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-  }
+  "dependencies": {
+    "@inkstone/core": "0.0.0"
+  },
+  "devDependencies": {}
 }

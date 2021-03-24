@@ -1,0 +1,21 @@
+{
+  "name": "@inkstone/core",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "module": "dist/core.es.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "buildOptions": {
+    "name": "Core",
+    "formats": [
+      "es",
+      "cjs",
+      "iife"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
