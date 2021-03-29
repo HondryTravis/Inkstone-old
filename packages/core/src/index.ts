@@ -1,6 +1,11 @@
-import { Selection } from './selection/Selection'
-
+import { createEventEmitter } from './event/EventEmitter'
+import { NativeSelection } from './selection/Selection'
+import Container from './Container'
+import Editor from './Editor'
 
 export {
-  Selection
+  Editor,
+  NativeSelection,
+  Container,
+  createEventEmitter
 }

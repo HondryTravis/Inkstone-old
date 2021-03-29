@@ -1,9 +1,6 @@
-import Container from './Container';
-import * as InkStoneCore from '@inkstone/core'
 
-const InkStone = 'hello inkstone';
+import InkStone from './Inkstone'
 
 export {
-  Container,
-  InkStoneCore
+  InkStone
 }

@@ -121,7 +121,7 @@ function createMinifiedConfig(format) {
     },
     [
       terser({
-        module: /^esm/.test(format),
+        module: /^es/.test(format),
         compress: {
           ecma: 2015,
           pure_getters: true

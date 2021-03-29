@@ -1,65 +1,33 @@
 
-import { DOMUtils, IDOMUtils} from '../dom/DOMUtils';
+import { DOM } from '../dom/DOM';
 
-
-interface ISelection {
-
-}
-
-
-const Selection = function(test): ISelection {
-
-  let doc: IDOMUtils
-
-  let current = test
-
-  let currentInkstone = null
-
-  const currentSelection: globalThis.Selection = window.getSelection()
-
-  function setup(inkstone) {
-    currentInkstone = inkstone || null
+class NativeSelection implements InkStone.ISelection {
+  public dom = DOM
+  public inkstone: any;
+  public selection: Selection
+  public range: Range
+  constructor(){
+    this.selection = window.getSelection();
   }
-
-  function collapse(toStart: boolean = false) {
+  inject(inkstone) {
+    this.inkstone = inkstone
+  }
+  collapse(toStart: boolean = false) {
+    const { selection } = this
     if(toStart) {
-      currentSelection.collapseToStart()
+      selection.collapseToStart()
       return
     }
-    currentSelection.collapseToEnd()
+    selection.collapseToEnd()
   }
-
-  function getSelectedNode(parentNode, offset?) {
-
+  setCursorLocation(parentNode: Node, offset?: number) {
+    this.selection.collapse(parentNode, offset);
   }
-
-  function setCursorLocation(parentNode: Node, offset?: number): void {
-    currentSelection.collapse(parentNode, offset);
-  }
-
-  function getContent() {
-
-  }
-
-  function selectAllChildren(parentNode) {
-    currentSelection.selectAllChildren(parentNode)
-  }
-
-  function getSelection() {
-    return currentSelection
-  }
-
-  return {
-    current,
-    setup,
-    collapse,
-    getSelectedNode,
-    selectAllChildren,
-    setCursorLocation,
-    getSelection
+  selectAllChildren(parentNode: Node) {
+    this.selection.selectAllChildren(parentNode)
   }
 }
 
 export {
-  Selection
+  NativeSelection
 }

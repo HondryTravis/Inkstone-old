@@ -40,7 +40,11 @@ function createEventEmitter() {
   function getAllListeners() {
     return listeners
   }
+  function getListener(key) {
+    return listeners.get(key)
+  }
   return {
+    getListener,
     getAllListeners,
     on,
     once,

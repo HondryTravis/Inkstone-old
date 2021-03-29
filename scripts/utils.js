@@ -2,19 +2,21 @@ const path = require('path');
 const fs = require('fs');
 const chalk = require('chalk');
 
-const packagesDir = path.resolve(__dirname, '../packages')
-
-const targets = (exports.targets = fs.readdirSync(packagesDir)).filter( d => {
-  if (!fs.statSync(`${packagesDir}/${d}`).isDirectory()) {
+const targets = (exports.targets = fs.readdirSync('packages').filter( d => {
+  if (!fs.statSync(`packages/${d}`).isDirectory()) {
     return false;
   }
-  const pkg = require(`${packagesDir}/${d}/package.json`)
+  const pkg = require(`../packages/${d}/package.json`)
+
+  if(pkg.buildOptions && pkg.buildOptions.isSkin) {
+    return false;
+  }
 
   if (pkg.private && !pkg.buildOptions) {
     return false;
   }
   return true;
-})
+}))
 
 
 exports.fuzzyMatchTarget = (partialTargets, includeAllMatching) => {
