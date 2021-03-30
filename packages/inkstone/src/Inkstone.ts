@@ -1,10 +1,12 @@
+import { MODULE_LOADED } from './core/constant/index';
 
 import {
   Editor,
   NativeSelection,
   createEventEmitter,
-  Container
-} from '@inkstone/core'
+  Container,
+  Constant
+} from './core'
 
 
 export default class Inkstone implements InkStone.IInkStone {
@@ -19,7 +21,7 @@ export default class Inkstone implements InkStone.IInkStone {
   }
   inject(key, module) {
     const { container } = this
-    container.bind(key, module)
+    container.add(key, module)
   }
   fire(key, ...args) {
     this.eventListeners.fire(key, ...args)
@@ -37,10 +39,9 @@ export default class Inkstone implements InkStone.IInkStone {
       }
     })
 
-    this.fire('ModuleLoaded', {inkstone: this})
+    this.fire(Constant.MODULE_LOADED, {inkstone: this})
 
     this.editor = container.use('Editor')
-
 
     if(!this.editor) {
       throw console.error('init faild')

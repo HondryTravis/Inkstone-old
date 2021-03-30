@@ -16,7 +16,7 @@ declare namespace InkStone {
 
   export interface IContainer {
     use(name: string): any;
-    bind(name: string, value: any): void;
+    add(name: string, value: any): void;
     eachItem(callback: MAP_EACH_CALLBACK): void;
     remove(name: string): void;
   }
