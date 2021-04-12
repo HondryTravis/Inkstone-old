@@ -44,11 +44,11 @@ function createEventEmitter() {
     return listeners.get(key)
   }
   return {
-    getListener,
-    getAllListeners,
     on,
     once,
     fire,
+    getListener,
+    getAllListeners,
     removeListener,
     removeAllListeners
   }

@@ -32,3 +32,7 @@ declare namespace InkStone {
   export interface INativeRange extends Range {}
 }
 
+declare interface Window {
+  InkStone: any
+}
+

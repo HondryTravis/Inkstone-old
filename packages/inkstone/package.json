@@ -4,7 +4,7 @@
   "description": "simple rich text editor, easy to extend. Built with TypeScript",
   "main": "index.js",
   "buildOptions": {
-    "name": "Inkstone",
+    "name": "Ink",
     "formats": [
       "es",
       "cjs",

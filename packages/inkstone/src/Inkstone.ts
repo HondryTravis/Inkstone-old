@@ -1,21 +1,22 @@
-import { MODULE_LOADED } from './core/constant/index';
-
 import {
   Editor,
   NativeSelection,
   createEventEmitter,
   Container,
-  Constant
+  Constant,
+  Utils
 } from './core'
 
 
-export default class Inkstone implements InkStone.IInkStone {
+export default class InkStone implements InkStone.IInkStone {
   container: InkStone.IContainer;
   eventListeners = createEventEmitter();
   settings: any;
-  editor: any
+  editor: any;
+  utils: any
   constructor() {
     this.container = new Container();
+    this.utils = Utils
     this.inject('Editor', Editor)
     this.inject('NativeSelection', NativeSelection)
   }

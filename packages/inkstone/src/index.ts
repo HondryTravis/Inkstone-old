@@ -1,6 +1,10 @@
 
 import InkStone from './Inkstone'
-type data = 'test'
+
+if(window) {
+  window.InkStone = InkStone
+}
+
 export {
   InkStone
 }
