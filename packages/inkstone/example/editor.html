@@ -12,6 +12,7 @@
 <body>
   <h1>Document Test</h1>
   <p>测试文字</p>
+  <p>测试嵌<span>套</span>文字<span>放假打开<span>范德萨发<span>套</span>爱上阿萨德发撒</span>撒了就法拉三等奖阿萨德</span></p>
   <div id="inkstone">
     <p>Finally, as an exercise, we can go ahead and print the require function in the b.js file. To learn more about the
       output of the require function, we can check the implementation in this section of the Node source code.</p>
@@ -28,12 +29,10 @@
 
 <script>
   const ink = new Ink.InkStone()
-
+  console.log('inkstone:' ,ink)
   ink.setup({
     selector: '#inkstone'
-  }).create()
-
-  console.log('inkstone:' ,ink)
+  }).create().render()
 
 </script>
 

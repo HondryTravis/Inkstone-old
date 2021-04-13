@@ -1,62 +1,49 @@
-import {
-  Editor,
-  NativeSelection,
-  createEventEmitter,
-  Container,
-  Constant,
-  Utils
-} from './core'
-
+import Core from './core'
+import Editor from './editor'
 
 export default class InkStone implements InkStone.IInkStone {
   container: InkStone.IContainer;
-  eventListeners = createEventEmitter();
-  settings: any;
+  settings: any
   editor: any;
-  utils: any
   constructor() {
-    this.container = new Container();
-    this.utils = Utils
-    this.inject('Editor', Editor)
-    this.inject('NativeSelection', NativeSelection)
+    this.container = new Core.Container();
   }
-  inject(key, module) {
+  inject(key, ctor, isCore?) {
     const { container } = this
-    container.add(key, module)
+    container.bind(key, ctor, isCore)
   }
-  fire(key, ...args) {
-    this.eventListeners.fire(key, ...args)
-  }
-  on(key, callback) {
-    this.eventListeners.on(key, callback)
+  use(key) {
+    return this.container.use(key)
   }
   create() {
     const { container } = this
 
-    container.eachItem((item) => {
-      if(!item.instance && !item.singleton) {
-        item.instance = new item.module()
-        item.instance.inject(this)
-      }
-    })
-
-    this.fire(Constant.MODULE_LOADED, {inkstone: this})
-
     this.editor = container.use('Editor')
 
-    if(!this.editor) {
-      throw console.error('init faild')
+    const createInstance =() => {
+      const instance = new this.editor.ctor()
+      this.editor.instance = instance
+      this.editor = instance
     }
+
+    this.editor.instance ?? createInstance()
+    this.editor.inject('Core', this.use('Core'), true)
+    this.editor.setup(this.settings)
+    return this
+  }
+  render() {
 
     this.editor.render()
 
     return this
   }
-  destroy() {
-    this.editor.destroy()
-  }
   setup(settings) {
+    this.inject('Core', Core, true)
+    this.inject('Editor', Editor)
     this.settings = settings
     return this
+  }
+  destroy() {
+    this.editor.destroy()
   }
 }

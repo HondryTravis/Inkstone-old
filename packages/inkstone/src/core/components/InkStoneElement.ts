@@ -14,13 +14,12 @@ export default class InkStoneElement extends HTMLElement {
   }
   connectedCallback() {
     this.iniSetup()
-    this.inkstone.fire('Init')
   }
   inject(inkstone) {
     this.inkstone = inkstone
   }
   iniSetup() {
-    this.inkstone.fire('LoadSkins')
+    this.style.display = 'block'
     this.initEvent()
   }
   initEvent() {

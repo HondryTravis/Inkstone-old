@@ -1,11 +1,6 @@
-import { createEventEmitter } from './event/EventEmitter'
-import { NativeSelection } from './selection/Selection'
-import Container from './Container'
-import Editor from './Editor'
-
+const exec = 'aaaa'
+console.log('test')
 export {
-  Editor,
-  NativeSelection,
-  Container,
-  createEventEmitter
+  exec
 }
+

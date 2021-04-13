@@ -102,7 +102,7 @@ function isEditable(node): boolean {
  */
 function nextNode(node: Node) {
   if (node.hasChildNodes()) {
-      return node.firstChild;
+    return node.firstChild;
   }
   return nextNodeDescendants(node);
 }
@@ -114,10 +114,10 @@ function nextNode(node: Node) {
  */
 function nextNodeDescendants(node: Node) {
   while (node && !node.nextSibling) {
-      node = node.parentNode;
+    node = node.parentNode;
   }
   if (!node) {
-      return null;
+    return null;
   }
   return node.nextSibling;
 }
@@ -129,15 +129,15 @@ function nextNodeDescendants(node: Node) {
  */
 function previousNode(node) {
   if (node.previousSibling) {
-      node = node.previousSibling;
-      while (node.hasChildNodes()) {
-          node = node.lastChild;
-      }
-      return node;
+    node = node.previousSibling;
+    while (node.hasChildNodes()) {
+      node = node.lastChild;
+    }
+    return node;
   }
   if (node.parentNode
-  && node.parentNode.nodeType == Node.ELEMENT_NODE) {
-      return node.parentNode;
+    && node.parentNode.nodeType == Node.ELEMENT_NODE) {
+    return node.parentNode;
   }
   return null;
 }
@@ -147,8 +147,8 @@ function previousNode(node) {
  */
 function isAncestor(ancestor, descendant) {
   return ancestor
-      && descendant
-      && Boolean(ancestor.compareDocumentPosition(descendant) & Node.DOCUMENT_POSITION_CONTAINED_BY);
+    && descendant
+    && Boolean(ancestor.compareDocumentPosition(descendant) & Node.DOCUMENT_POSITION_CONTAINED_BY);
 }
 
 /**
@@ -159,7 +159,7 @@ function isAncestor(ancestor, descendant) {
  */
 function isAncestorContainer(ancestor, descendant) {
   return (ancestor || descendant)
-      && (ancestor == descendant || isAncestor(ancestor, descendant));
+    && (ancestor == descendant || isAncestor(ancestor, descendant));
 }
 
 /**
@@ -170,8 +170,8 @@ function isAncestorContainer(ancestor, descendant) {
  */
 function isDescendant(descendant, ancestor) {
   return ancestor
-      && descendant
-      && Boolean(ancestor.compareDocumentPosition(descendant) & Node.DOCUMENT_POSITION_CONTAINED_BY);
+    && descendant
+    && Boolean(ancestor.compareDocumentPosition(descendant) & Node.DOCUMENT_POSITION_CONTAINED_BY);
 }
 
 /**
@@ -202,8 +202,8 @@ function isAfter(node1, node2) {
 function getAncestors(node) {
   const ancestors = [];
   while (node.parentNode) {
-      ancestors.unshift(node.parentNode);
-      node = node.parentNode;
+    ancestors.unshift(node.parentNode);
+    node = node.parentNode;
   }
   return ancestors;
 }
@@ -244,14 +244,14 @@ function getInclusiveDescendants(node) {
 function convertProperty(property) {
   // Special-case for now
   const map = {
-      'fontFamily': 'font-family',
-      'fontSize': 'font-size',
-      'fontStyle': 'font-style',
-      'fontWeight': 'font-weight',
-      'textDecoration': 'text-decoration',
+    'fontFamily': 'font-family',
+    'fontSize': 'font-size',
+    'fontStyle': 'font-style',
+    'fontWeight': 'font-weight',
+    'textDecoration': 'text-decoration',
   };
   if (typeof map[property] != 'undefined') {
-      return map[property];
+    return map[property];
   }
 
   return property;
@@ -259,26 +259,26 @@ function convertProperty(property) {
 // 返回给定CSS大小的<font size = X>值，如果存在，则返回undefined没有。
 function cssSizeToLegacy(cssVal) {
   return {
-      "x-small": 1,
-      "small": 2,
-      "medium": 3,
-      "large": 4,
-      "x-large": 5,
-      "xx-large": 6,
-      "xxx-large": 7
+    "x-small": 1,
+    "small": 2,
+    "medium": 3,
+    "large": 4,
+    "x-large": 5,
+    "xx-large": 6,
+    "xxx-large": 7
   }[cssVal];
 }
 
 // 根据给定的旧大小返回CSS大小。
 function legacySizeToCss(legacyVal) {
   return {
-      1: "x-small",
-      2: "small",
-      3: "medium",
-      4: "large",
-      5: "x-large",
-      6: "xx-large",
-      7: "xxx-large",
+    1: "x-small",
+    2: "small",
+    3: "medium",
+    4: "large",
+    5: "x-large",
+    6: "xx-large",
+    7: "xxx-large",
   }[legacyVal];
 }
 
@@ -286,17 +286,17 @@ function legacySizeToCss(legacyVal) {
 // HTML中的 “方向性”。 我不用担心非HTML元素。
 // “元素的方向性是'ltr'或'rtl'，并且根据以下适当的步骤确定”
 function getDirectionality(element) {
-   // 如果元素的排版方向性是 ltr 那么结果也是 ltr
+  // 如果元素的排版方向性是 ltr 那么结果也是 ltr
   if (element.dir == "ltr") {
-      return "ltr";
+    return "ltr";
   }
   // 如果元素的排版方向性是 rtl 那么结果也是 rtl
   if (element.dir == "rtl") {
-      return "rtl";
+    return "rtl";
   }
   // 如果元素的根节点是 html，那么直接跳过判断，返回默认值
   if (!isHtmlElement(element.parentNode)) {
-      return "ltr";
+    return "ltr";
   }
 
   // 如果没有定义文本的排列方向，寻找父节点，子节点默认集成父节点的方向性
@@ -307,8 +307,8 @@ function getDirectionality(element) {
 function getNodeIndex(node) {
   let ret = 0;
   while (node.previousSibling) {
-      ret++;
-      node = node.previousSibling;
+    ret++;
+    node = node.previousSibling;
   }
   return ret;
 }
@@ -320,7 +320,7 @@ function getNodeIndex(node) {
  * [anthor] 返回 node's childNodes's length
  */
 function getNodeLength(node) {
-  switch(node.nodeType) {
+  switch (node.nodeType) {
     case Node.PROCESSING_INSTRUCTION_NODE:
     case Node.DOCUMENT_TYPE_NODE:
       return 0;
@@ -345,44 +345,42 @@ function getPosition(nodeA, offsetA, nodeB, offsetB) {
   // 则如果偏移量A等于偏移量B，则返回相等
   // 如果偏移量A小于偏移量B，则返回之前
   // 如果偏移量A大于偏移量B，则返回之后
-    if (nodeA == nodeB) {
-      if (offsetA == offsetB) {
-          return "equal";
-      }
-      if (offsetA < offsetB) {
-          return "before";
-      }
-      if (offsetA > offsetB) {
-          return "after";
-      }
+  if (nodeA == nodeB) {
+    if (offsetA == offsetB) {
+      return "equal";
+    }
+    if (offsetA < offsetB) {
+      return "before";
+    }
+    if (offsetA > offsetB) {
+      return "after";
+    }
   }
-
   // 如果节点A以树顺序在节点B之后，计算（节点B，偏移量B）相对于（节点A，偏移量A）的位置。
   // 如果它在之前，则在返回 after。如果在之后，则返回 before
   if (nodeB.compareDocumentPosition(nodeA) & Node.DOCUMENT_POSITION_FOLLOWING) {
-      let pos = getPosition(nodeB, offsetB, nodeA, offsetA);
-      if (pos == "before") {
-          return "after";
-      }
-      if (pos == "after") {
-          return "before";
-      }
+    let pos = getPosition(nodeB, offsetB, nodeA, offsetA);
+    if (pos == "before") {
+      return "after";
+    }
+    if (pos == "after") {
+      return "before";
+    }
   }
-
   // 如果 nodeA 是 nodeB 的祖先
   if (nodeB.compareDocumentPosition(nodeA) & Node.DOCUMENT_POSITION_CONTAINS) {
-      // 计算子节点，nodeB 是 nodeA 的子节点
-      let child = nodeB;
+    // 计算子节点，nodeB 是 nodeA 的子节点
+    let child = nodeB;
 
-      // 当 child 不是节点A的子代时，将 child 设置为其父代。
-      while (child.parentNode != nodeA) {
-          child = child.parentNode;
-      }
+    // 当 child 不是节点A的子代时，将 child 设置为其父代。
+    while (child.parentNode != nodeA) {
+      child = child.parentNode;
+    }
 
-      // 如果子项的索引小于偏移量A，则返回 after
-      if (getNodeIndex(child) < offsetA) {
-          return "after";
-      }
+    // 如果子项的索引小于偏移量A，则返回 after
+    if (getNodeIndex(child) < offsetA) {
+      return "after";
+    }
   }
 
   return "before";
@@ -395,7 +393,7 @@ function getPosition(nodeA, offsetA, nodeB, offsetB) {
 function getFurthestAncestor(node) {
   let root = node;
   while (root.parentNode != null) {
-      root = root.parentNode;
+    root = root.parentNode;
   }
   return root;
 }
@@ -409,8 +407,138 @@ function isContained(node, range: Range) {
   let pos2 = getPosition(node, getNodeLength(node), range.endContainer, range.endOffset);
 
   return getFurthestAncestor(node) == getFurthestAncestor(range.startContainer)
-      && pos1 == "after"
-      && pos2 == "before";
+    && pos1 == "after"
+    && pos2 == "before";
+}
+
+// 获得选区范围内包含的所有节点, 忽略包裹的祖先节点
+function getContainedNodes(range, condition) {
+  if (typeof condition == "undefined") {
+    condition = function () { return true };
+  }
+  let node = range.startContainer;
+  if (node.hasChildNodes()
+    && range.startOffset < node.childNodes.length) {
+    // 一个子节点被包裹
+    node = node.childNodes[range.startOffset];
+  } else if (range.startOffset == getNodeLength(node)) {
+    // 不能包含任何后代
+    node = nextNodeDescendants(node);
+  } else {
+    // 如果没有子节点, 该节点也不可以被包含
+    node = nextNode(node);
+  }
+
+  let stop = range.endContainer;
+  if (stop.hasChildNodes()
+    && range.endOffset < stop.childNodes.length) {
+    // 最后一个包含的节点之后的节点是子节点
+    stop = stop.childNodes[range.endOffset];
+  } else {
+    // 可能包含此节点和/或其某些子节点
+    stop = nextNodeDescendants(stop);
+  }
+
+  let nodeList = [];
+  while (isBefore(node, stop)) {
+    if (isContained(node, range)
+      && condition(node)) {
+      nodeList.push(node);
+      node = nextNodeDescendants(node);
+      continue;
+    }
+    node = nextNode(node);
+  }
+  return nodeList;
+}
+// 获得选区范围内包含的所有节点, 不忽略包裹的祖先节点
+function getAllContainedNodes(range, condition) {
+  if (typeof condition == "undefined") {
+    condition = function () { return true };
+  }
+  let node = range.startContainer;
+  if (node.hasChildNodes()
+    && range.startOffset < node.childNodes.length) {
+    // 一个子节点被包裹
+    node = node.childNodes[range.startOffset];
+  } else if (range.startOffset == getNodeLength(node)) {
+    // 不能包含任何后代
+    node = nextNodeDescendants(node);
+  } else {
+    // 如果没有子节点, 该节点也不可以被包含
+    node = nextNode(node);
+  }
+
+  let stop = range.endContainer;
+  if (stop.hasChildNodes()
+    && range.endOffset < stop.childNodes.length) {
+    // 最后一个包含的节点之后的节点是子节点
+    stop = stop.childNodes[range.endOffset];
+  } else {
+    // 可能包含此节点和/或其某些子节点
+    stop = nextNodeDescendants(stop);
+  }
+
+  let nodeList = [];
+  while (isBefore(node, stop)) {
+    if (isContained(node, range)
+      && condition(node)) {
+      nodeList.push(node);
+    }
+    node = nextNode(node);
+  }
+  return nodeList;
+}
+
+function normalizeColor(color) {
+  let resultCache = {}
+
+  if (color.toLowerCase() == "currentcolor") {
+    return null;
+  }
+
+  function normalize(color) {
+    if (resultCache[color] !== undefined) {
+      return resultCache[color];
+    }
+    let originalColor = color;
+
+    let outerSpan = document.createElement("span");
+    document.body.appendChild(outerSpan);
+    outerSpan.style.color = "black";
+
+
+    let innerSpan = document.createElement("span");
+    outerSpan.appendChild(innerSpan);
+    innerSpan.style.color = color;
+    color = getComputedStyle(innerSpan).color;
+
+    if (color == "rgb(0, 0, 0)") {
+      // Maybe it's really black, maybe it's invalid.
+      outerSpan.style.color = "white";
+      color = getComputedStyle(innerSpan).color;
+      if (color != "rgb(0, 0, 0)") {
+        return resultCache[originalColor] = null;
+      }
+    }
+
+    document.body.removeChild(outerSpan);
+
+    // getComputedStyle 的颜色值 color 会出现几个意外的问题，单独处理
+    if (/^rgba\([0-9]+, [0-9]+, [0-9]+, 1\)$/.test(color)) {
+      return resultCache[originalColor] =
+        color.replace("rgba", "rgb").replace(", 1)", ")");
+    }
+    if (color == "transparent") {
+      return resultCache[originalColor] =
+        "rgba(0, 0, 0, 0)";
+    }
+    // fix, 异常数值
+    color = color.replace(/, 0.496094\)$/, ", 0.5)");
+    return resultCache[originalColor] = color;
+  }
+
+  return normalize(color)
 }
 
 export default {
@@ -441,5 +569,8 @@ export default {
   getNodeLength,
   getPosition,
   getFurthestAncestor,
-  isContained
+  isContained,
+  getContainedNodes,
+  getAllContainedNodes,
+  normalizeColor
 }

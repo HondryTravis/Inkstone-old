@@ -1,27 +1,32 @@
+
+type ICallbackFn = (value: any, key: string, map: Map<string, any>) => void
 export default class Container implements InkStone.IContainer {
   private container: Map<string, any>
   constructor() {
     this.container = new Map()
   }
-  add(name, module) {
-    this.container.set(name, {
-      singleton: false,
+  bind(name, ctor, isCore?: boolean) {
+    (name && ctor) && this.container.set(name, {
+      isCore: isCore ?? false,
+      singleton: true,
       instance: null,
-      module: module
+      ctor: ctor ?? null
     })
     return this
   }
   use(name) {
     const current = this.container.get(name)
-    if(current && current.instance) {
-      return current.instance
-    }
     return current
+      && (current.isCore
+        ? current.ctor
+        : ((current.instance) ?? current)
+      )
   }
   remove(name) {
     this.container.delete(name)
   }
-  eachItem(callback: (value: any, key: string, map: Map<string, any>) => void): void {
-    this.container.forEach(callback)
+  eachItem(callback: ICallbackFn, thisArg?: any) {
+    callback && this.container.forEach(callback, thisArg)
+    return this
   }
 }

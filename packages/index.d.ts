@@ -4,19 +4,11 @@ declare namespace InkStone {
 
   export interface IInkStone {
     editor: any;
-    settings: any;
-    container: IContainer
-    inject(key, module): void;
-    fire(key, ...args: any[]): void;
-    on(key, callback: Function): void;
-    create(): void;
-    destroy(): void;
-    setup(settings): void;
   }
 
   export interface IContainer {
     use(name: string): any;
-    add(name: string, value: any): void;
+    bind(name: string, value: any, isCore?: boolean): void;
     eachItem(callback: MAP_EACH_CALLBACK): void;
     remove(name: string): void;
   }
