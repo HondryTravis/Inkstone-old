@@ -1,12 +1,13 @@
 import Core from './core'
 import Editor from './editor'
-
+import Test from './plugin/test'
 export default class InkStone implements InkStone.IInkStone {
   container: InkStone.IContainer;
   settings: any
   editor: any;
   constructor() {
-    this.container = new Core.Container();
+    this.container = Core.NativeContainer();
+
   }
   inject(key, ctor, isCore?) {
     const { container } = this
@@ -18,7 +19,7 @@ export default class InkStone implements InkStone.IInkStone {
   create() {
     const { container } = this
 
-    this.editor = container.use('Editor')
+    this.editor = container.use('editor')
 
     const createInstance =() => {
       const instance = new this.editor.ctor()
@@ -27,8 +28,13 @@ export default class InkStone implements InkStone.IInkStone {
     }
 
     this.editor.instance ?? createInstance()
-    this.editor.inject('Core', this.use('Core'), true)
+    this.editor.inject('core', this.use('core'), true)
     this.editor.setup(this.settings)
+    const { settings } = this
+    settings.plugins.forEach ( plugin => {
+      const item = this.container.get(`${plugin}`)
+      this.editor.inject(`${plugin}`, item.ctor)
+    })
     return this
   }
   render() {
@@ -38,8 +44,9 @@ export default class InkStone implements InkStone.IInkStone {
     return this
   }
   setup(settings) {
-    this.inject('Core', Core, true)
-    this.inject('Editor', Editor)
+    this.inject('core', Core, true)
+    this.inject('editor', Editor)
+    this.inject('test', Test)
     this.settings = settings
     return this
   }

@@ -1,6 +1,6 @@
-function createEventEmitter() {
+const NativeEvent = () => {
   const listeners = new Map()
-  function on(eventName, callback) {
+  const on = (eventName, callback) => {
     if (listeners.has(eventName)) {
       const currentListener = listeners.get(eventName)
       if (Array.isArray(currentListener)) {
@@ -10,7 +10,7 @@ function createEventEmitter() {
       listeners.set(eventName, [].concat(callback))
     }
   }
-  function fire(eventName, ...args) {
+  const fire = (eventName, ...args) => {
     if (listeners.has(eventName)) {
       const currentListener = listeners.get(eventName)
       for (const callback of currentListener) {
@@ -18,7 +18,7 @@ function createEventEmitter() {
       }
     }
   }
-  function removeListener(eventName, callback) {
+  const removeListener = (eventName, callback) => {
     if (listeners.has(eventName)) {
       const currentListener = listeners.get(eventName)
       const idx = currentListener.indexOf(callback)
@@ -27,23 +27,25 @@ function createEventEmitter() {
       }
     }
   }
-  function once(eventName, callback) {
+  const once = (eventName, callback) => {
     const execCalllback = function (...args) {
       callback.call(null, ...args)
       removeListener(eventName, execCalllback)
     }
     on(eventName, execCalllback)
   }
-  function removeAllListeners() {
+  const removeAllListeners = () => {
     listeners.clear()
   }
-  function getAllListeners() {
+  const getAllListeners = () => {
     return listeners
   }
-  function getListener(key) {
+  const getListener = (key) => {
     return listeners.get(key)
   }
-  return {
+
+  const exports = {
+    items: listeners,
     on,
     once,
     fire,
@@ -52,8 +54,9 @@ function createEventEmitter() {
     removeListener,
     removeAllListeners
   }
+  return exports
 }
 
 export {
-  createEventEmitter
+  NativeEvent
 }

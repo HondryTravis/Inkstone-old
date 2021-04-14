@@ -541,7 +541,21 @@ function normalizeColor(color) {
   return normalize(color)
 }
 
-export default {
+// 返回 null 或格式为 #xxxxxx 形式。
+function parseSimpleColor(color) {
+  color = normalizeColor(color);
+  const matches = /^rgb\(([0-9]+), ([0-9]+), ([0-9]+)\)$/.exec(color);
+  if (matches) {
+      return "#"
+          + parseInt(matches[1]).toString(16).replace(/^.$/, "0$&")
+          + parseInt(matches[2]).toString(16).replace(/^.$/, "0$&")
+          + parseInt(matches[3]).toString(16).replace(/^.$/, "0$&");
+  }
+  return null;
+}
+
+
+const exports = {
   isAncestor,
   isAncestorContainer,
   isBefore,
@@ -572,5 +586,8 @@ export default {
   isContained,
   getContainedNodes,
   getAllContainedNodes,
-  normalizeColor
+  normalizeColor,
+  parseSimpleColor
 }
+
+export default exports

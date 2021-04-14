@@ -8,3 +8,7 @@ export const MODULE_LOADED= 'ModuleLoaded'
 
 // node 创建完成
 export const NODE_CREATED = 'NodeCreated'
+
+
+// node 创建完成
+export const EDITOR_INIT = 'EditorInit'

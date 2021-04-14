@@ -1,21 +1,23 @@
-import Components from '../core/components/index';
-import InkStoneElement from '../core/components/InkStoneElement';
-
+import Components from './components/index';
+import InkStoneElement from './components/InkStoneElement';
+import * as Constants from './constant'
 export default class Editor {
   container: InkStone.IContainer
   components: Map<any, any>;
-  doc: InkStoneElement;
+  fragment_root: InkStoneElement;
   listeners: any;
+  dom: any;
   core: any;
+  selection: any;
+  utils: any
   settings: any
   constructor() {
     this.components = Components;
   }
   inject(key, ctor, isCore?) {
     if(isCore && isCore === true) {
-      this.container = new ctor.Container
-      this.listeners = ctor.createEventEmitter()
       this.core = ctor
+      this.container = this.core.NativeContainer()
     }
     this.container.bind(key, ctor, isCore)
   }
@@ -31,15 +33,27 @@ export default class Editor {
   render() {
     const { selector } = this.settings
     const wrapper = document.querySelector(selector)
-    let cache = wrapper.innerHTML
-    this.doc = document.createElement('ink-stone') as InkStoneElement
-    this.doc.inject(this)
-    this.doc.setContent(cache)
-    cache = null
-    wrapper.innerHTML = ``
-    wrapper.appendChild(this.doc)
+    this.fragment_root = document.createElement('ink-stone') as InkStoneElement
+    this.fragment_root.inject(this)
+    this.dom = this.core.NativeDOM(document, this.fragment_root)
+    this.listeners = this.core.NativeEvent()
+    this.selection = this.core.NativeSelection(this)
+    this.utils = this.core.Utils
+    this.container.eachItem((item) => {
+      !item.isCore && (item.instance ?? (item.instance = new item.ctor(this)))
+    })
+    let node
+    console.dir(wrapper)
+    while(node = wrapper.firstChild) {
+      console.log(node)
+      this.dom.add(this.fragment_root, node)
+    }
+    console.log(this.fragment_root)
+    // this.dom.add(wrapper, this.fragment_root)
+    console.log(this.listeners)
+    this.fire(Constants.EDITOR_INIT, this)
   }
   destroy() {
-    this.doc.remove()
+    this.fragment_root.remove()
   }
 }

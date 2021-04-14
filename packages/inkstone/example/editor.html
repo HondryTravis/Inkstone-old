@@ -11,19 +11,12 @@
 
 <body>
   <h1>Document Test</h1>
-  <p>测试文字</p>
-  <p>测试嵌<span>套</span>文字<span>放假打开<span>范德萨发<span>套</span>爱上阿萨德发撒</span>撒了就法拉三等奖阿萨德</span></p>
+
+
   <div id="inkstone">
-    <p>Finally, as an exercise, we can go ahead and print the require function in the b.js file. To learn more about the
-      output of the require function, we can check the implementation in this section of the Node source code.</p>
-    <p>As shown above, we can see the module object on line 6 with all the properties, including the filename, id,
-      children, path depth, etc. Also, we can see the argument object, which consists of the export object, require
-      function, file and folder path, and the Module (which is essentially what the wrapper function does, but it
-      executes
-      the code contained in a file/module).</p>
-    <p>
-      <span>As shown above,</span> <span>can check the implementation in this section of</span>
-    </p>
+    <p>测试嵌<span>套</span>文字<span>放假打开<span>范德萨发<span>套</span>爱上阿萨德发撒</span>撒了就法拉三等奖阿萨德</span></p>
+    <p>测试文字</p>
+    <p>用户可能从左到右<span>（与文档方向相反）</span>选择文本或从右到左<span>（与文档方向相反）</span>选择文本。anchor 指向用户开始选择的地方，而 focus 指向用户结束选择的地方。如果你使用鼠标选择文本的话，<span>anchor</span> 就指向你按下鼠标键的地方，而 focus 就指向你松开鼠标键的地方。anchor 和 focus 的概念不能与选区的起始位置和终止位置混淆，因为 <span>anchor</span> 指向的位置可能在 focus 指向的位置的前面，也可能在 focus 指向位置的后面，这取决于你选择文本时鼠标移动的方向（也就是按下鼠标键和松开鼠标键的位置）。</p>
   </div>
 </body>
 
@@ -31,7 +24,8 @@
   const ink = new Ink.InkStone()
   console.log('inkstone:' ,ink)
   ink.setup({
-    selector: '#inkstone'
+    selector: '#inkstone',
+    plugins: ['test']
   }).create().render()
 
 </script>

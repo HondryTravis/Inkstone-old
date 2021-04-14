@@ -1,4 +1,3 @@
-import { insertAfter, insertBefore } from '../dom/DOM'
 
 
 export default class InkStoneElement extends HTMLElement {
@@ -30,6 +29,9 @@ export default class InkStoneElement extends HTMLElement {
   }
   setContent(html) {
     this.current.innerHTML = html
+  }
+  add(node) {
+
   }
 }
 

@@ -8,6 +8,7 @@ declare namespace InkStone {
 
   export interface IContainer {
     use(name: string): any;
+    get(name: string): any;
     bind(name: string, value: any, isCore?: boolean): void;
     eachItem(callback: MAP_EACH_CALLBACK): void;
     remove(name: string): void;
