@@ -14,12 +14,12 @@ export default class NativeElement {
     const ele = document.createElement(this.tag)
     const props = this.props;
     const children = this.children || [];
-    for(let propName in props){
-      const propsValue = props[propName];
-      ele.setAttribute(propName, propsValue);
+    for(const propName in props){
+      const propValue = props[propName];
+      ele.setAttribute(propName, propValue);
     }
     children.forEach(( child: any) => {
-      const childEl = child instanceof NativeElement ? child.render(): document.createTextNode(child)
+      const childEl = child instanceof NativeElement ? child.render() : document.createTextNode(child)
       ele.appendChild(childEl);
     })
     return ele;
