@@ -1,15 +1,13 @@
-import { createEventEmitter } from './event/EventEmitter'
+import { NativeEvent } from './event/Event'
 import { NativeSelection } from './selection/Selection'
-import Container from './Container'
-import Editor from './Editor'
-import * as Constant from './constant'
+import { NativeDOM } from './dom/DOM'
+import { NativeContainer } from './container/Container'
 import Utils from './utils/Utils'
 
-export {
-  Editor,
+export default {
+  NativeContainer,
+  NativeDOM,
   NativeSelection,
-  Container,
-  createEventEmitter,
-  Constant,
+  NativeEvent,
   Utils
 }

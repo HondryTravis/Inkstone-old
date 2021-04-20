@@ -32,6 +32,7 @@ const buildAllMatching = args.all || args.a
 start()
 
 async function start() {
+  console.log('target', targets)
   if (!targets.length) {
     await buildAll(allTargets)
     checkAllSizes(allTargets)

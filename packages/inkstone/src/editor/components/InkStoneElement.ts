@@ -1,4 +1,3 @@
-import { insertAfter, insertBefore } from '../dom/DOM'
 
 
 export default class InkStoneElement extends HTMLElement {
@@ -14,13 +13,12 @@ export default class InkStoneElement extends HTMLElement {
   }
   connectedCallback() {
     this.iniSetup()
-    this.inkstone.fire('Init')
   }
   inject(inkstone) {
     this.inkstone = inkstone
   }
   iniSetup() {
-    this.inkstone.fire('LoadSkins')
+    this.style.display = 'block'
     this.initEvent()
   }
   initEvent() {
@@ -31,6 +29,9 @@ export default class InkStoneElement extends HTMLElement {
   }
   setContent(html) {
     this.current.innerHTML = html
+  }
+  add(node) {
+
   }
 }
 
