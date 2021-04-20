@@ -57,6 +57,27 @@ const NativeEvent = () => {
   return exports
 }
 
+const createEventObject = (opts) => {
+  let currentEvent = {
+    name: 'defaultEventName',
+    handleEvent: function(evt) {
+      return (currentEvent[evt.type] && typeof currentEvent[evt.type] === 'function')
+          && currentEvent[evt.type].call(evt.target, evt)
+    },
+    options: {
+      capture: false,
+      once: false,
+      passive: false,
+    }
+  }
+  currentEvent = {
+    ...currentEvent,
+    ...opts
+  }
+  return currentEvent
+}
+
 export {
-  NativeEvent
+  NativeEvent,
+  createEventObject
 }
