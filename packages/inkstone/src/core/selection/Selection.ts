@@ -7,20 +7,12 @@ const NativeSelection = (editor: Editor) => {
   const selection = dom.getNativeSelection(root)
 
   const collapse = (toStart: boolean = false) =>{
-    if(toStart) {
-      selection.collapseToStart()
-      return
-    }
-    selection.collapseToEnd()
+    return (toStart && selection.collapseToStart()) || selection.collapseToEnd()
   }
 
-  const setCursorLocation = (parentNode: Node, offset?: number) => {
-    selection.collapse(parentNode, offset);
-  }
+  const setCursorLocation = (parentNode: Node, offset?: number) => selection.collapse(parentNode, offset);
 
-  const selectAllChildren = (parentNode: Node) => {
-    selection.selectAllChildren(parentNode)
-  }
+  const selectAllChildren = (parentNode: Node) => selection.selectAllChildren(parentNode)
 
   const exports = {
     selection,

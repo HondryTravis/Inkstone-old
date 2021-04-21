@@ -1,5 +1,5 @@
 
-import NativeElement from './Element'
+import NativeElement from './NativeElement'
 
 
 
@@ -27,15 +27,13 @@ const NativeDOM = (document, fragment_root) => {
     const selection = getNativeSelection(root)
     return selection.getRangeAt(0)
   }
-  const setHTML = (node, html) => {
-    node.innerHTML = html
-  }
-  const setText = (node, text) => {
-    node.textContent = text
-  }
-  const add = (target, current) => {
-    target.appendChild(current)
-  }
+  const setHTML = (node, html) => (node.innerHTML = html)
+
+  const setText = (node, text) => (node.textContent = text)
+
+  const add = (target, current) => target.appendChild(current)
+
+
 
   const exports = {
     fragment,
