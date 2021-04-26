@@ -31,9 +31,8 @@ export default class InkStoneElement extends HTMLElement {
     this.current.innerHTML = html
   }
   add(node) {
-
+    this.current.appendChild(node)
   }
 }
-
 
 customElements.define('ink-stone', InkStoneElement);

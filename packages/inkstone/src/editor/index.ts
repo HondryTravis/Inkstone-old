@@ -31,8 +31,17 @@ export default class Editor {
     this.settings = settings
   }
   render() {
+    this.init()
     const { selector } = this.settings
     const wrapper = document.querySelector(selector)
+    let node
+    while(node = wrapper.firstChild) {
+      this.fragment_root.add(node)
+    }
+    this.dom.add(wrapper, this.fragment_root)
+    this.fire(Constants.EDITOR_INIT, this)
+  }
+  init() {
     this.fragment_root = document.createElement('ink-stone') as InkStoneElement
     this.fragment_root.inject(this)
     this.dom = this.core.NativeDOM(document, this.fragment_root)
@@ -42,16 +51,6 @@ export default class Editor {
     this.container.eachItem((item) => {
       !item.isCore && (item.instance ?? (item.instance = new item.ctor(this)))
     })
-    let node
-    console.dir(wrapper)
-    while(node = wrapper.firstChild) {
-      console.log(node)
-      this.dom.add(this.fragment_root, node)
-    }
-    console.log(this.fragment_root)
-    // this.dom.add(wrapper, this.fragment_root)
-    console.log(this.listeners)
-    this.fire(Constants.EDITOR_INIT, this)
   }
   destroy() {
     this.fragment_root.remove()
