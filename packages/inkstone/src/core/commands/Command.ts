@@ -56,11 +56,12 @@ const NativeCommands = (editor: Editor) => {
 
     const execCallback = (command, showUi, value) => {
       return () => {
-        if (!(command in commands) || !queryCommandEnabled(command)) {
+        const currentCommand = commands.get(command)
+        if (!(command in currentCommand) || !queryCommandEnabled(command)) {
           return false;
         }
         // 执行命令操作，将值作为参数传递给指令，测试结果
-        let ret = commands.get(command).action(value);
+        let ret = currentCommand.action(value);
 
         // 如果出现既不是 true 也不是 false 的问题，直接抛出异常
         if (ret !== true && ret !== false) {
@@ -114,7 +115,7 @@ const NativeCommands = (editor: Editor) => {
             return false;
         }
         // 如果命令不确定，则返回true，否则返回false
-        return commands[command].indeterm();
+        return currentCommand.indeterm();
       }
     }
     return editCommandMethod(command, range, callback(command))
@@ -136,12 +137,12 @@ const NativeCommands = (editor: Editor) => {
         }
 
         // 如果命令的状态为true，则返回true；否则为false
-        return commands[command].state();
+        return currentCommand.state();
       }
     }
     return editCommandMethod(command, range, callback(command))
   }
-  // 当 HTMLDocument 上使用 queryCommandSupported（command）方法时调用接口，如果命令为受支持，否则为false。
+  // 当编辑器使用 queryCommandSupported（command）方法时调用接口，如果命令为受支持，否则为false。
   const queryCommandSupported = (command: string) => commands.get(command.toLowerCase())
   const queryCommandValue = (command: string, range?: Range) => {
     command = command.toLowerCase();
@@ -163,7 +164,7 @@ const NativeCommands = (editor: Editor) => {
       }
 
       // 返回命令的结果
-      return commands[command].value();
+      return currentCommand.value();
     }
     return editCommandMethod(command, range, callback)
   }
