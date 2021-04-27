@@ -1,5 +1,15 @@
 const htmlNamespace = 'http://www.w3.org/1999/xhtml';
 
+// 禁止子节点名称
+const prohibitedParagraphChildNames = [
+  "address", "article", "aside",
+  "blockquote", "caption", "center", "col", "colgroup", "dd", "details",
+  "dir", "div", "dl", "dt", "fieldset", "figcaption", "figure", "footer",
+  "form", "h1", "h2", "h3", "h4", "h5", "h6", "header", "hgroup", "hr", "li",
+  "listing", "menu", "nav", "ol", "p", "plaintext", "pre", "section",
+  "summary", "table", "tbody", "td", "tfoot", "th", "thead", "tr", "ul",
+  "xmp"];
+
 /**
  * @description 是否是 html 命名空间
  * @param ns
@@ -35,11 +45,19 @@ function isHtmlElement(node, tags?: string | string[] | undefined): boolean {
 }
 
 /**
+ * @description 不支持段落子代标签中存在子节点 tag
+ * @param node
+ * @returns
+ */
+function isProhibitedParagraphChild(node) {
+  return isHtmlElement(node, prohibitedParagraphChildNames);
+}
+
+/**
  * @description 是块级元素吗
  * @param node
  * @returns boolean
  */
-
 function isBlockNode(node) {
 
   const verify = ['inline', 'inline-block', 'inline-table', 'none']
@@ -94,6 +112,331 @@ function isEditable(node): boolean {
       || (node.nodeType === Node.ELEMENT_NODE && node.namespaceURI === 'http://www.w3.org/1998/Math/MathML' && node.localName === 'math')
       || (node.nodeType !== Node.ELEMENT_NODE && isHtmlElement(node.parentNode)));
 }
+
+/**
+ * @description 是否有可编辑的后代节点
+ * @param node
+ * @returns
+ */
+function hasEditableDescendants(node) {
+  for (let i = 0; i < node.childNodes.length; i++) {
+      if (isEditable(node.childNodes[i])
+      || hasEditableDescendants(node.childNodes[i])) {
+          return true;
+      }
+  }
+  return false;
+}
+/**
+ * @description
+ * 1. 如果节点不可编辑，那么编辑根节点为 null
+ * 2. 如果节点是编辑根节点，则返回节点本身
+ * 3. 如果节点是可编辑的，则可编辑的根节点为该节点的最近祖先。
+ * @param node
+ * @returns
+ */
+function getEditingHostOf(node) {
+  if (isEditingHost(node)) {
+      return node;
+  } else if (isEditable(node)) {
+      let ancestor = node.parentNode;
+      while (!isEditingHost(ancestor)) {
+          ancestor = ancestor.parentNode;
+      }
+      return ancestor;
+  } else {
+      return null;
+  }
+}
+
+/**
+ * @description 是否拥有共同的可编辑根节点祖先
+ * @param node1
+ * @param node2
+ * @returns
+ */
+function inSameEditingHost(node1, node2) {
+  return getEditingHostOf(node1)
+      && getEditingHostOf(node1) == getEditingHostOf(node2);
+}
+
+
+/**
+ * @description 是否是折叠的空格
+ * @param br
+ * @returns
+ */
+
+function isCollapsedLineBreak(br) {
+  if (!isHtmlElement(br, "br")) {
+      return false;
+  }
+
+  // 在它后面添加一个zwsp(零宽空格)，看看这是否会改变最近的非内联父级的高度。
+  // 注意：这实际上是不可靠的，因为父级可能有固定的高度或其他东西。
+  let ref = br.parentNode;
+  while (getComputedStyle(ref).display == "inline") {
+      ref = ref.parentNode;
+  }
+
+  let refStyle = ref.hasAttribute("style") ? ref.getAttribute("style") : null;
+  ref.style.height = "auto";
+  ref.style.maxHeight = "none";
+  ref.style.minHeight = "0";
+
+  let space = document.createTextNode("\u200b");
+  let origHeight = ref.offsetHeight;
+  if (origHeight == 0) {
+      throw "isCollapsedLineBreak: original height is zero, bug?";
+  }
+  br.parentNode.insertBefore(space, br.nextSibling);
+
+  let finalHeight = ref.offsetHeight;
+
+  space.parentNode.removeChild(space);
+
+  if (refStyle === null) {
+      ref.setAttribute("style", "");
+      ref.removeAttribute("style");
+  } else {
+      ref.setAttribute("style", refStyle);
+  }
+
+  // 如果zwsp(零宽空格)没有创建一条全新的竖线 caret，而只是使一条现有的caret稍微高一点，那么可以允许。
+  // firefox6.0 在第一行是粗体时显示这种行为。
+  return origHeight < finalHeight - 5;
+}
+/**
+ * @description 是否是多余无效的 br
+ * 多余的换行符是不具有视觉效果的br，因为从DOM中将其删除不会改变布局，除了是作为li的唯一子代的br
+ * @param br
+ * @returns
+ */
+function isExtraneousLineBreak(br) {
+  if (!isHtmlElement(br, "br")) {
+      return false;
+  }
+
+  if (isHtmlElement(br.parentNode, "li")
+  && br.parentNode.childNodes.length == 1) {
+      return false;
+  }
+
+  // 使换行符消失，看看这是否会改变块的高度。
+  // 是的，这是一个 css hack。我们必须重置参考节点上的高度等，因为否则它的高度不会改变，如果它不是自动的。
+  let ref = br.parentNode;
+  while (getComputedStyle(ref).display == "inline") {
+      ref = ref.parentNode;
+  }
+
+  let refStyle = ref.hasAttribute("style") ? ref.getAttribute("style") : null;
+  ref.style.height = "auto";
+  ref.style.maxHeight = "none";
+  ref.style.minHeight = "0";
+
+  let brStyle = br.hasAttribute("style") ? br.getAttribute("style") : null;
+  let origHeight = ref.offsetHeight;
+  if (origHeight == 0) {
+      throw "isExtraneousLineBreak: original height is zero, bug?";
+  }
+
+  br.setAttribute("style", "display:none");
+
+  let finalHeight = ref.offsetHeight;
+  if (refStyle === null) {
+      ref.setAttribute("style", "");
+      ref.removeAttribute("style");
+  } else {
+      ref.setAttribute("style", refStyle);
+  }
+  if (brStyle === null) {
+      br.removeAttribute("style");
+  } else {
+      br.setAttribute("style", brStyle);
+  }
+
+  return origHeight == finalHeight;
+}
+
+/**
+ * @description 是否是空白节点?
+ * 空白节点是其数据为空字符串的Text节点; 或其数据仅由一个或多个制表符（0x0009），换行符（0x000A），回车符（0x000D）和/或 空格（0x0020），并且其父级是一个元素，其 'white-space' 的解析值为 'normal' 或“ nowrap”；或者其数据仅由一个或多个制表符（0x0009）组成的Text节点，回车符（0x000D ）和/或空格（0x0020），并且其父项是Element，其对 'white-space' 的解析值为 'pre-line'
+ * @param node
+ * @returns
+ */
+function isWhitespaceNode(node) {
+  return node
+      && node.nodeType == Node.TEXT_NODE
+      && (node.data == ""
+      || (
+          /^[\t\n\r ]+$/.test(node.data)
+          && node.parentNode
+          && node.parentNode.nodeType == Node.ELEMENT_NODE
+          && ["normal", "nowrap"].indexOf(getComputedStyle(node.parentNode).whiteSpace) != -1
+      ) || (
+          /^[\t\r ]+$/.test(node.data)
+          && node.parentNode
+          && node.parentNode.nodeType == Node.ELEMENT_NODE
+          && getComputedStyle(node.parentNode).whiteSpace == "pre-line"
+      ));
+}
+
+/**
+ * @description 如果以下算法返回true，则节点是折叠的空白节点
+ * @param node
+ * @returns
+ */
+function isCollapsedWhitespaceNode(node) {
+  // 如果不是空白节点返回
+  if (!isWhitespaceNode(node)) {
+      return false;
+  }
+
+  // 如果 node 的 data 为空，返回 true
+  if (node.data == "") {
+      return true;
+  }
+
+  // 查看祖先节点
+  let ancestor = node.parentNode;
+
+  // 如果祖先节点也是空的，返回 ture
+  if (!ancestor) {
+      return true;
+  }
+
+  // 如果祖先节点的属性 display 显示为 none, 返回 ture
+  if (getAncestors(node).some(function(ancestor) {
+      return ancestor.nodeType == Node.ELEMENT_NODE
+          && getComputedStyle(ancestor).display == "none";
+  })) {
+      return true;
+  }
+
+  // 当祖先不是块节点且其父节点不为空时，将祖先设置为其父节点
+  while (!isBlockNode(ancestor)
+  && ancestor.parentNode) {
+      ancestor = ancestor.parentNode;
+  }
+
+  // 创建引用节点
+  let reference = node;
+
+  // 而 reference 是祖先的后代: 向前查询
+  while (reference != ancestor) {
+      // 让 reference 按树顺序作为其前面的节点.
+      reference = previousNode(reference);
+
+      // 如果是块级节点或者 br 返回 true
+      if (isBlockNode(reference)
+      || isHtmlElement(reference, "br")) {
+          return true;
+      }
+
+      // 如果 reference 是不是空格节点的 Text 节点 或 img，请退出此循环
+      if ((reference.nodeType == Node.TEXT_NODE && !isWhitespaceNode(reference))
+      || isHtmlElement(reference, "img")) {
+          break;
+      }
+  }
+
+  // reference = node
+  reference = node;
+
+  // reference 是祖先的后代 向前查询
+  let stop = nextNodeDescendants(ancestor);
+  while (reference != stop) {
+      // 令 reference 为树后的节点，如果没有这样的节点，则为null。
+      reference = nextNode(reference);
+
+      // 如果 reference 是块节点或 br，则返回true
+      if (isBlockNode(reference)
+      || isHtmlElement(reference, "br")) {
+          return true;
+      }
+
+      // 如果 reference 是不是空格节点的Text节点或img，请退出此循环。
+      if ((reference && reference.nodeType == Node.TEXT_NODE && !isWhitespaceNode(reference))
+      || isHtmlElement(reference, "img")) {
+          break;
+      }
+  }
+
+  // 都不满足返回 false
+  return false;
+}
+
+/**
+ * @description 判断节点是可见的，如果某个节点是块节点，或不是折叠空格节点的文本节点，或img，或不是无关换行符的br，或任何具有可见子代的节点，则该节点是可见的；排除具有祖先容器元素且其 'display' 属性解析值为 'none' 的任何节点
+ * @param node
+ * @returns boolean
+ */
+function isVisible(node) {
+  if (!node) {
+      return false;
+  }
+
+  if (getAncestors(node).concat(node)
+  .filter(function(node) { return node.nodeType == Node.ELEMENT_NODE })
+  .some(function(node) { return getComputedStyle(node).display == "none" })) {
+      return false;
+  }
+
+  if (isBlockNode(node)
+  || (node.nodeType == Node.TEXT_NODE && !isCollapsedWhitespaceNode(node))
+  || isHtmlElement(node, "img")
+  || (isHtmlElement(node, "br") && !isExtraneousLineBreak(node))) {
+      return true;
+  }
+
+  for (let i = 0; i < node.childNodes.length; i++) {
+      if (isVisible(node.childNodes[i])) {
+          return true;
+      }
+  }
+
+  return false;
+}
+
+/**
+ * @description 节点是不可见的
+ * @param node
+ * @returns
+ */
+function isInvisible(node) {
+  return node && !isVisible(node);
+}
+/**
+ * @description 是折叠的块级属性
+ * 折叠的块级属性可以是不是无关的换行符的折叠换行符，也可以是作为内联节点的元素，其子元素都是不可见的或折叠的块级属性，并且至少有一个子元素是折叠的块级属性。
+ * @param node
+ * @returns
+ */
+function isCollapsedBlockProp(node) {
+  if (isCollapsedLineBreak(node)
+  && !isExtraneousLineBreak(node)) {
+      return true;
+  }
+
+  if (!isInlineNode(node)
+  || node.nodeType != Node.ELEMENT_NODE) {
+      return false;
+  }
+
+  let hasCollapsedBlockPropChild = false;
+  for (let i = 0; i < node.childNodes.length; i++) {
+      if (!isInvisible(node.childNodes[i])
+      && !isCollapsedBlockProp(node.childNodes[i])) {
+          return false;
+      }
+      if (isCollapsedBlockProp(node.childNodes[i])) {
+          hasCollapsedBlockPropChild = true;
+      }
+  }
+
+  return hasCollapsedBlockPropChild;
+}
+
 
 /**
  * @description 获得相邻的下个最近的 node 节点
@@ -555,6 +898,10 @@ function parseSimpleColor(color) {
 }
 
 
+// algorithms
+
+
+
 const exports = {
   isAncestor,
   isAncestorContainer,
@@ -565,8 +912,19 @@ const exports = {
   isEditable,
   isHtmlElement,
   isHtmlNamespace,
+  isProhibitedParagraphChild,
   isBlockNode,
   isInlineNode,
+  hasEditableDescendants,
+  getEditingHostOf,
+  inSameEditingHost,
+  isCollapsedLineBreak,
+  isExtraneousLineBreak,
+  isWhitespaceNode,
+  isCollapsedWhitespaceNode,
+  isVisible,
+  isInvisible,
+  isCollapsedBlockProp,
   getAncestors,
   getInclusiveAncestors,
   getDescendants,
@@ -587,7 +945,9 @@ const exports = {
   getContainedNodes,
   getAllContainedNodes,
   normalizeColor,
-  parseSimpleColor
+  parseSimpleColor,
+  // algorithms
+
 }
 
 export default exports

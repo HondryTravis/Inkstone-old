@@ -6,8 +6,6 @@ const NativeCommands = (editor: Editor) => {
 
   let executionStackDepth = 0;
 
-
-
   const commands = new Map()
 
   const { selection, utils } = editor;

@@ -2,13 +2,20 @@
 import Editor from '../../editor';
 
 const NativeSelection = (editor: Editor) => {
-  const { dom, utils } = editor
+  const { dom, utils, fragment_root } = editor
   const { root } = dom.fragment
 
   // 当前编辑器的全局 range
   let internalRange = null
 
-  const selection = dom.getNativeSelection(root)
+  let extraRanges = [];
+
+  // magic, I don't know if this is great 直接覆盖好吗？
+  const getSelection = function (): Selection {
+    return (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE
+        && root.getSelection())
+        || window.getSelection()
+  }
 
   const getNavtiveRange = () => {
     let ret: Range;
@@ -25,7 +32,7 @@ const NativeSelection = (editor: Editor) => {
     || !ret.endContainer.ownerDocument
     || !utils.isDescendant(ret.startContainer, ret.startContainer.ownerDocument)
     || !utils.isDescendant(ret.endContainer, ret.endContainer.ownerDocument)) {
-        throw "Invalid active range; test bug?";
+        throw "Invalid active range in getNavtiveRange; test bug? 魔法？";
     }
     return ret;
   }
@@ -35,21 +42,23 @@ const NativeSelection = (editor: Editor) => {
   }
 
   const collapse = (toStart: boolean = false) =>{
-    return (toStart && selection.collapseToStart()) || selection.collapseToEnd()
+    return toStart ? getSelection().collapseToStart() : getSelection().collapseToEnd()
   }
 
-  const setCursorLocation = (parentNode: Node, offset?: number) => selection.collapse(parentNode, offset);
+  const setCursorLocation = (parentNode: Node, offset?: number) => getSelection().collapse(parentNode, offset);
 
-  const selectAllChildren = (parentNode: Node) => selection.selectAllChildren(parentNode)
+  const selectAllChildren = (parentNode: Node) => getSelection().selectAllChildren(parentNode)
 
   const exports = {
     range: internalRange,
-    selection,
+    selection: getSelection(),
+    root,
     collapse,
     getNavtiveRange,
     setNativeRange,
     setCursorLocation,
-    selectAllChildren
+    selectAllChildren,
+    getSelection
   }
 
   return exports

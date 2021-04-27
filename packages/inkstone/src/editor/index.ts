@@ -48,6 +48,7 @@ export default class Editor {
     this.listeners = this.core.NativeEvent()
     this.selection = this.core.NativeSelection(this)
     this.utils = this.core.Utils
+
     this.container.eachItem((item) => {
       !item.isCore && (item.instance ?? (item.instance = new item.ctor(this)))
     })
