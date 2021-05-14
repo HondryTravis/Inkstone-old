@@ -1,17 +1,17 @@
-const createStore = (defaultState) =>{
-  let current = defaultState || {}
+const createStore = (defaultState) => {
+    let current = defaultState || {}
 
-  const setState = (newState) => {
-    current = {
-      ...current,
-      ...newState
+    const setState = (newState) => {
+        current = {
+            ...current,
+            ...newState
+        }
     }
-  }
-  const getState = () => current
+    const getState = () => current
 
-  const exports = {
-    setState,
-    getState
-  }
-  return exports
+    const exports = {
+        setState,
+        getState
+    }
+    return exports
 }
