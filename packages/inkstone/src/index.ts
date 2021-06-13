@@ -1,10 +1,10 @@
 
 import InkStone from './Inkstone'
 
-if(window) {
-  window.InkStone = InkStone
+if (window) {
+    window.InkStone = InkStone
 }
 
 export {
-  InkStone
+    InkStone
 }

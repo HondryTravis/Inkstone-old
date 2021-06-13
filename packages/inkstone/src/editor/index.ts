@@ -4,14 +4,14 @@ import * as Constants from './constant'
 export default class Editor {
     container: InkStone.IContainer
     components: Map<any, any>;
-    fragment_root: InkStoneElement;
+    root: InkStoneElement;
     listeners: any;
     dom: any;
     core: any;
     selection: any;
     utils: any
     settings: any
-    command: any
+    commands: any
     constructor() {
         this.components = Components;
     }
@@ -28,38 +28,40 @@ export default class Editor {
     on(eventName, callback) {
         this.listeners && this.listeners.on(eventName, callback)
     }
-    setup(settings) {
+    preset(settings) {
         this.settings = settings
     }
     render() {
-        this.init()
+        this.setup()
         const { selector } = this.settings
         const wrapper = document.querySelector(selector)
         let node
         while (node = wrapper.firstChild) {
-            this.fragment_root.add(node)
+            this.root.add(node)
         }
-        this.dom.add(wrapper, this.fragment_root)
+        this.dom.add(wrapper, this.root)
         this.fire(Constants.EDITOR_INIT, this)
     }
-    init() {
-        this.fragment_root = document.createElement('ink-stone') as InkStoneElement
-        this.fragment_root.inject(this)
+    setup() {
+        this.root = document.createElement('ink-stone') as InkStoneElement
+        this.root.inject(this)
 
         this.utils = this.core.Utils
-        this.dom = this.core.NativeDOM(document, this.fragment_root)
+        this.dom = this.core.NativeDOM(document, this.root)
         this.selection = this.core.NativeSelection(this)
         this.listeners = this.core.NativeEvent()
-        this.command = this.core.NativeCommands(this)
+        this.commands = this.core.NativeCommands(this)
 
         this.container.eachItem((item) => {
             !item.isCore && (item.instance ?? (item.instance = item.ctor(this)))
         })
+
+        this.commands.preset()
     }
     destroy() {
-        this.fragment_root.remove()
+        this.root.remove()
     }
     execCommand(command, showUi, value) {
-        this.command.execCommand(command, showUi, value)
+        this.commands.execCommand(command, showUi, value)
     }
 }

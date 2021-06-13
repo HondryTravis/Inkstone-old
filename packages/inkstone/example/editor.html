@@ -13,7 +13,8 @@
   <h1>Plugin Test</h1>
 
   <div>
-    <button>test</button>
+    <button id="test">test</button>
+    <button id="bold">bold</button>
   </div>
   <div id="inkstone">
     <p>测试嵌<span>套</span>文字<span>放假打开<span>范德萨发<span>套</span>爱上阿萨德发撒</span>撒了就法拉三等奖阿萨德</span></p>
@@ -37,10 +38,12 @@
     selector: '#inkstone',
     plugins: ['test']
   }).create().render()
-  document.querySelector('button').onclick = function() {
-    // ink.editor.execCommand('bold')
+  document.querySelector('#test').onclick = function() {
     const range = ink.editor.selection.getActiveRange()
     console.log(ink.editor.utils.getEffectivelyContainedNodes(range))
+  }
+  document.querySelector('#bold').onclick = function() {
+    ink.editor.execCommand('bold')
   }
 </script>
 

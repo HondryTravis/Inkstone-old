@@ -1,11 +1,9 @@
 
 import NativeElement from './NativeElement'
 
-
-
 const NativeDOM = (document, fragment_root) => {
 
-    const fragment = fragment_root
+    const root = fragment_root
     const dom = document
 
     const insertAfter = (target, current) => target.insertAdjacentElement('afterend', current)
@@ -37,7 +35,7 @@ const NativeDOM = (document, fragment_root) => {
 
 
     const exports = {
-        fragment,
+        root,
         add,
         setHTML,
         setText,

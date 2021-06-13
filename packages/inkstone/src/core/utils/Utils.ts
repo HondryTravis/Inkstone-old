@@ -71,26 +71,26 @@ function isAllowedChild(child, parent_) {
     // 如果父级是“colgroup”，“table”，“tbody”，“tfoot”，“thead”，“tr”
     // 或本地名称等于其中一个的HTML元素，而child是一个Text节点，其数据不完全由空格字符组成，则返回false
     if ((["colgroup", "table", "tbody", "tfoot", "thead", "tr"].indexOf(parent_) != -1
-    || isHtmlElement(parent_, ["colgroup", "table", "tbody", "tfoot", "thead", "tr"]))
-    && typeof child == "object"
-    && child.nodeType == Node.TEXT_NODE
-    && !/^[ \t\n\f\r]*$/.test(child.data)) {
+        || isHtmlElement(parent_, ["colgroup", "table", "tbody", "tfoot", "thead", "tr"]))
+        && typeof child == "object"
+        && child.nodeType == Node.TEXT_NODE
+        && !/^[ \t\n\f\r]*$/.test(child.data)) {
         return false;
     }
 
     // “如果父级是“script”，“style”，“plaintext”或“xmp”，
     // 或者本地名称等于其中之一的HTML元素，而子级不是Text节点，则返回false。
     if ((["script", "style", "plaintext", "xmp"].indexOf(parent_) != -1
-    || isHtmlElement(parent_, ["script", "style", "plaintext", "xmp"]))
-    && (typeof child != "object" || child.nodeType != Node.TEXT_NODE)) {
+        || isHtmlElement(parent_, ["script", "style", "plaintext", "xmp"]))
+        && (typeof child != "object" || child.nodeType != Node.TEXT_NODE)) {
         return false;
     }
 
     // 如果child是Document，DocumentFragment或DocumentType，则返回false。
     if (typeof child == "object"
-    && (child.nodeType == Node.DOCUMENT_NODE
-        || child.nodeType == Node.DOCUMENT_FRAGMENT_NODE
-        || child.nodeType == Node.DOCUMENT_TYPE_NODE)) {
+        && (child.nodeType == Node.DOCUMENT_NODE
+            || child.nodeType == Node.DOCUMENT_FRAGMENT_NODE
+            || child.nodeType == Node.DOCUMENT_TYPE_NODE)) {
         return false;
     }
 
@@ -119,12 +119,12 @@ function isAllowedChild(child, parent_) {
                 return false;
             }
             if (prohibitedParagraphChildNames.indexOf(child) != -1
-            && isElementWithInlineContents(ancestor)) {
+                && isElementWithInlineContents(ancestor)) {
                 return false;
             }
             if (/^h[1-6]$/.test(child)
-            && isHtmlElement(ancestor)
-            && /^H[1-6]$/.test(ancestor.tagName)) {
+                && isHtmlElement(ancestor)
+                && /^H[1-6]$/.test(ancestor.tagName)) {
                 return false;
             }
             ancestor = ancestor.parentNode;
@@ -136,8 +136,8 @@ function isAllowedChild(child, parent_) {
 
     // 如果父节点是一个 Element or DocumentFragment, 返回 true
     if (typeof parent_ == "object"
-    && (parent_.nodeType == Node.ELEMENT_NODE
-        || parent_.nodeType == Node.DOCUMENT_FRAGMENT_NODE)) {
+        && (parent_.nodeType == Node.ELEMENT_NODE
+            || parent_.nodeType == Node.DOCUMENT_FRAGMENT_NODE)) {
         return true;
     }
 
@@ -177,14 +177,14 @@ function isAllowedChild(child, parent_) {
 
     // 如果子节点是 "dd" or "dt" 并且父节点不是 "dl", 返回 false
     if (["dd", "dt"].indexOf(child) != -1
-    && parent_ != "dl") {
+        && parent_ != "dl") {
         return false;
     }
 
     // 如果子节点是"li" 并且父节点不是"ol" 或者 “ul”， 返回 false
     if (child == "li"
-    && parent_ != "ol"
-    && parent_ != "ul") {
+        && parent_ != "ol"
+        && parent_ != "ul") {
         return false;
     }
 
@@ -200,7 +200,7 @@ function isAllowedChild(child, parent_) {
     ];
     for (let i = 0; i < table.length; i++) {
         if (table[i][0].indexOf(parent_) != -1
-        && table[i][1].indexOf(child) != -1) {
+            && table[i][1].indexOf(child) != -1) {
             return false;
         }
     }
@@ -230,15 +230,15 @@ function isEffectivelyContained(node, range: Range) {
 
     // 如果节点是 Range 的起始节点，并且是个 TextNode, 并且 Node.length 不相同
     if (node == range.startContainer
-    && node.nodeType == Node.TEXT_NODE
-    && getNodeLength(node) != range.startOffset) {
+        && node.nodeType == Node.TEXT_NODE
+        && getNodeLength(node) != range.startOffset) {
         return true;
     }
 
     // 如果节点是 Range 的结束节点，并且是个 TextNode, 并且 Range.endOffset != 0
     if (node == range.endContainer
-    && node.nodeType == Node.TEXT_NODE
-    && range.endOffset != 0) {
+        && node.nodeType == Node.TEXT_NODE
+        && range.endOffset != 0) {
         return true
     }
 
@@ -247,13 +247,13 @@ function isEffectivelyContained(node, range: Range) {
     // 并且范围的起始节点不是该节点的后代或不是 Text 节点，或者范围的起始偏移为零
     // 并且范围的末端节点不是该节点的后代或不是 Text 节点，或者范围的末端偏移是其末端节点的长度。
     if (node.hasChildNodes()
-    && [].every.call(node.childNodes, (child) => isEffectivelyContained(child, range))
-    && (!isDescendant(range.startContainer, node)
-        || range.startContainer.nodeType != Node.TEXT_NODE
-        || range.startOffset == 0)
-    && (!isDescendant(range.endContainer, node)
-        || range.endContainer.nodeType != Node.TEXT_NODE
-        || range.endOffset == getNodeLength(range.endContainer))
+        && [].every.call(node.childNodes, (child) => isEffectivelyContained(child, range))
+        && (!isDescendant(range.startContainer, node)
+            || range.startContainer.nodeType != Node.TEXT_NODE
+            || range.startOffset == 0)
+        && (!isDescendant(range.endContainer, node)
+            || range.endContainer.nodeType != Node.TEXT_NODE
+            || range.endOffset == getNodeLength(range.endContainer))
     ) {
         return true;
     }
@@ -278,7 +278,7 @@ function getEffectivelyContainedNodes(range: Range, condition: Function) {
     while (isBefore(node, stop)) {
 
         if (isEffectivelyContained(node, range)
-        && condition(node)) {
+            && condition(node)) {
             nodeList.push(node);
             node = nextNodeDescendants(node);
             continue;
@@ -303,7 +303,7 @@ function getAllEffectivelyContainedNodes(range: Range, condition: Function) {
     while (isBefore(node, stop)) {
 
         if (isEffectivelyContained(node, range)
-        && condition(node)) {
+            && condition(node)) {
             nodeList.push(node);
         }
         node = nextNode(node);
@@ -354,7 +354,7 @@ function isModifiableElement(node): boolean {
         }
 
         if (node.tagName == "A"
-        && node.hasAttribute("href")) {
+            && node.hasAttribute("href")) {
             numAttrs--;
         }
 
@@ -391,73 +391,87 @@ function isSimpleModifiableElement(node) {
     // 其元素恰好具有一个 style 属性, 但是没有设置设置CSS属性（包括无效或无法识别的属性）。
     // 请勿尝试无效或无法识别的内容。
     if (node.hasAttribute("style")
-    && node.style.length == 0) {
+        && node.style.length == 0) {
         return true;
     }
 
     // 如果是一个 A 元素， 并且只有 href 属性也算是
     if (node.tagName == "A"
-    && node.hasAttribute("href")) {
+        && node.hasAttribute("href")) {
         return true;
     }
 
     // 如果是 font 元素并且只有一个属性，color | face | size
     if (node.tagName == "FONT"
-    && (node.hasAttribute("color")
-        || node.hasAttribute("face")
-        || node.hasAttribute("size")
-    )) {
+        && (node.hasAttribute("color")
+            || node.hasAttribute("face")
+            || node.hasAttribute("size")
+        )) {
         return true;
     }
 
     // 如果是一个 b | strong 元素并且只有一个属性 style 并且只有一个样式属性 font-weight
     if ((node.tagName == "B" || node.tagName == "STRONG")
-    && node.hasAttribute("style")
-    && node.style.length == 1
-    && node.style.fontWeight != "") {
+        && node.hasAttribute("style")
+        && node.style.length == 1
+        && node.style.fontWeight != "") {
         return true;
     }
 
     // 如果是一个 i | em 元素并且只有一个属性 style 并且只有一个样式属性 font-style
     if ((node.tagName == "I" || node.tagName == "EM")
-    && node.hasAttribute("style")
-    && node.style.length == 1
-    && node.style.fontStyle != "") {
+        && node.hasAttribute("style")
+        && node.style.length == 1
+        && node.style.fontStyle != "") {
         return true;
     }
 
     // 如果是 a | font | span 并且只有一个属性 style，并且它的 text-decoration 为空
     if ((node.tagName == "A" || node.tagName == "FONT" || node.tagName == "SPAN")
-    && node.hasAttribute("style")
-    && node.style.length == 1
-    && node.style.textDecoration == "") {
+        && node.hasAttribute("style")
+        && node.style.length == 1
+        && node.style.textDecoration == "") {
         return true;
     }
 
+
+    // 如果是一个 "A", "FONT", "S", "SPAN", "STRIKE", "U" 元素，并且有 style 属性
+    // 并且仅只设置了一个样式 "line-through", "underline", "overline", "none" 中的之一
+    // 奇怪的 length 检查是为了针对 Firefox 做的调整，走 8.02a 开始的版本
     if (["A", "FONT", "S", "SPAN", "STRIKE", "U"].indexOf(node.tagName) != -1
-    && node.hasAttribute("style")
-    && (node.style.length == 1
-        || (node.style.length == 4
-            && "MozTextBlink" in node.style
-            && "MozTextDecorationColor" in node.style
-            && "MozTextDecorationLine" in node.style
-            && "MozTextDecorationStyle" in node.style)
-        || (node.style.length == 4
-            && "MozTextBlink" in node.style
-            && "textDecorationColor" in node.style
-            && "textDecorationLine" in node.style
-            && "textDecorationStyle" in node.style)
-    )
-    && (node.style.textDecoration == "line-through"
-        || node.style.textDecoration == "underline"
-        || node.style.textDecoration == "overline"
-        || node.style.textDecoration == "none"
-    )) {
+        && node.hasAttribute("style")
+        && (node.style.length == 1
+            || (node.style.length == 4
+                && "MozTextBlink" in node.style
+                && "MozTextDecorationColor" in node.style
+                && "MozTextDecorationLine" in node.style
+                && "MozTextDecorationStyle" in node.style)
+            || (node.style.length == 4
+                && "MozTextBlink" in node.style
+                && "textDecorationColor" in node.style
+                && "textDecorationLine" in node.style
+                && "textDecorationStyle" in node.style)
+        )
+        && (node.style.textDecoration == "line-through"
+            || node.style.textDecoration == "underline"
+            || node.style.textDecoration == "overline"
+            || node.style.textDecoration == "none"
+        )) {
         return true;
     }
 
 }
 
+
+// 是否是一个可编辑可以格式化的可见节点，它可以是 TextNode，ImgNode 或 brNode
+function isFormattableNode(node) {
+    return isEditable(node)
+        && isVisible(node)
+        && (node.nodeType == Node.TEXT_NODE
+            || isHtmlElement(node, ["img", "br"]));
+}
+
+//
 /**
  * @description 是块级元素吗
  * @param node
@@ -526,7 +540,7 @@ function isEditable(node): boolean {
 function hasEditableDescendants(node) {
     for (let i = 0; i < node.childNodes.length; i++) {
         if (isEditable(node.childNodes[i])
-        || hasEditableDescendants(node.childNodes[i])) {
+            || hasEditableDescendants(node.childNodes[i])) {
             return true;
         }
     }
@@ -690,7 +704,7 @@ function isWhitespaceNode(node) {
  * @description 如果以下算法返回true，则节点是折叠的空白节点
  * @param node
  * @returns
- * 
+ *
  */
 function isCollapsedWhitespaceNode(node) {
     // 如果不是空白节点返回
@@ -721,7 +735,7 @@ function isCollapsedWhitespaceNode(node) {
 
     // 当祖先不是块节点且其父节点不为空时，将祖先设置为其父节点
     while (!isBlockNode(ancestor)
-    && ancestor.parentNode) {
+        && ancestor.parentNode) {
         ancestor = ancestor.parentNode;
     }
 
@@ -735,13 +749,13 @@ function isCollapsedWhitespaceNode(node) {
 
         // 如果是块级节点或者 br 返回 true
         if (isBlockNode(reference)
-        || isHtmlElement(reference, "br")) {
+            || isHtmlElement(reference, "br")) {
             return true;
         }
 
         // 如果 reference 是不是空格节点的 Text 节点 或 img，请退出此循环
         if ((reference.nodeType == Node.TEXT_NODE && !isWhitespaceNode(reference))
-        || isHtmlElement(reference, "img")) {
+            || isHtmlElement(reference, "img")) {
             break;
         }
     }
@@ -757,13 +771,13 @@ function isCollapsedWhitespaceNode(node) {
 
         // 如果 reference 是块节点或 br，则返回true
         if (isBlockNode(reference)
-        || isHtmlElement(reference, "br")) {
+            || isHtmlElement(reference, "br")) {
             return true;
         }
 
         // 如果 reference 是不是空格节点的Text节点或img，请退出此循环。
         if ((reference && reference.nodeType == Node.TEXT_NODE && !isWhitespaceNode(reference))
-        || isHtmlElement(reference, "img")) {
+            || isHtmlElement(reference, "img")) {
             break;
         }
     }
@@ -789,9 +803,9 @@ function isVisible(node) {
     }
 
     if (isBlockNode(node)
-    || (node.nodeType == Node.TEXT_NODE && !isCollapsedWhitespaceNode(node))
-    || isHtmlElement(node, "img")
-    || (isHtmlElement(node, "br") && !isExtraneousLineBreak(node))) {
+        || (node.nodeType == Node.TEXT_NODE && !isCollapsedWhitespaceNode(node))
+        || isHtmlElement(node, "img")
+        || (isHtmlElement(node, "br") && !isExtraneousLineBreak(node))) {
         return true;
     }
 
@@ -820,21 +834,23 @@ function isInvisible(node) {
  */
 function isCollapsedBlockProp(node) {
     if (isCollapsedLineBreak(node)
-    && !isExtraneousLineBreak(node)) {
+        && !isExtraneousLineBreak(node)) {
         return true;
     }
 
     if (!isInlineNode(node)
-    || node.nodeType != Node.ELEMENT_NODE) {
+        || node.nodeType != Node.ELEMENT_NODE) {
         return false;
     }
 
     let hasCollapsedBlockPropChild = false;
     for (let i = 0; i < node.childNodes.length; i++) {
+
         if (!isInvisible(node.childNodes[i])
-        && !isCollapsedBlockProp(node.childNodes[i])) {
+            && !isCollapsedBlockProp(node.childNodes[i])) {
             return false;
         }
+
         if (isCollapsedBlockProp(node.childNodes[i])) {
             hasCollapsedBlockPropChild = true;
         }
@@ -1164,6 +1180,7 @@ function getContainedNodes(range, condition) {
     if (typeof condition == "undefined") {
         condition = function () { return true };
     }
+
     let node = range.startContainer;
     if (node.hasChildNodes()
         && range.startOffset < node.childNodes.length) {
@@ -1205,6 +1222,7 @@ function getAllContainedNodes(range, condition) {
         condition = function () { return true };
     }
     let node = range.startContainer;
+
     if (node.hasChildNodes()
         && range.startOffset < node.childNodes.length) {
         // 一个子节点被包裹
@@ -1302,10 +1320,74 @@ function parseSimpleColor(color) {
     return null;
 }
 
+// 在节点之前删除多余的换行符
+function removeExtraneousLineBreaksBefore(node) {
+    // "Let ref be the previousSibling of node."
+    let ref = node.previousSibling;
 
-// algorithms
+    // "If ref is null, abort these steps."
+    if (!ref) {
+        return;
+    }
 
+    // "While ref has children, set ref to its lastChild."
+    while (ref.hasChildNodes()) {
+        ref = ref.lastChild;
+    }
 
+    // "While ref is invisible but not an extraneous line break, and ref does
+    // not equal node's parent, set ref to the node before it in tree order."
+    while (isInvisible(ref)
+    && !isExtraneousLineBreak(ref)
+    && ref != node.parentNode) {
+        ref = previousNode(ref);
+    }
+
+    // "If ref is an editable extraneous line break, remove it from its
+    // parent."
+    if (isEditable(ref)
+    && isExtraneousLineBreak(ref)) {
+        ref.parentNode.removeChild(ref);
+    }
+}
+
+// 删除节点末端的多余换行符
+function removeExtraneousLineBreaksAtTheEndOf(node) {
+    // "Let ref be node."
+    let ref = node;
+
+    // "While ref has children, set ref to its lastChild."
+    while (ref.hasChildNodes()) {
+        ref = ref.lastChild;
+    }
+
+    // "While ref is invisible but not an extraneous line break, and ref does
+    // not equal node, set ref to the node before it in tree order."
+    while (isInvisible(ref)
+    && !isExtraneousLineBreak(ref)
+    && ref != node) {
+        ref = previousNode(ref);
+    }
+
+    // "If ref is an editable extraneous line break:"
+    if (isEditable(ref)
+    && isExtraneousLineBreak(ref)) {
+        // "While ref's parent is editable and invisible, set ref to its
+        // parent."
+        while (isEditable(ref.parentNode)
+        && isInvisible(ref.parentNode)) {
+            ref = ref.parentNode;
+        }
+
+        // "Remove ref from its parent."
+        ref.parentNode.removeChild(ref);
+    }
+}
+
+function removeExtraneousLineBreaksFrom(node) {
+    removeExtraneousLineBreaksBefore(node);
+    removeExtraneousLineBreaksAtTheEndOf(node);
+}
 
 const exports = {
     isAncestor,
@@ -1323,6 +1405,9 @@ const exports = {
     isEffectivelyContained,
     getEffectivelyContainedNodes,
     getAllEffectivelyContainedNodes,
+    isModifiableElement,
+    isSimpleModifiableElement,
+    isFormattableNode,
     isBlockNode,
     isInlineNode,
     hasEditableDescendants,
@@ -1356,7 +1441,10 @@ const exports = {
     getAllContainedNodes,
     normalizeColor,
     parseSimpleColor,
-    // algorithms
+
+    removeExtraneousLineBreaksBefore,
+    removeExtraneousLineBreaksAtTheEndOf,
+    removeExtraneousLineBreaksFrom,
 
 }
 

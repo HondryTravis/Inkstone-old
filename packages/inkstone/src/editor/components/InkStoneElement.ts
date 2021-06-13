@@ -1,39 +1,53 @@
 
-
 export default class InkStoneElement extends HTMLElement {
 
     inkstone: InkStone.IInkStone
-    root: ShadowRoot;
     current: HTMLElement
 
     constructor() {
         super();
-        this.root = this.attachShadow({ mode: 'open' });
+
         this.current = document.createElement('div');
-        this.root.append(this.current)
-        this.setMode('true');
+
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.append(this.current)
     }
+
     connectedCallback() {
-        this.iniSetup()
+        this.setup()
     }
+
     inject(inkstone) {
         this.inkstone = inkstone
     }
-    iniSetup() {
+
+    preset() {
+        this.setMode('true');
+
+        // init style
         this.style.display = 'block'
+        this.current.style.outline = 'none'
+    }
+
+    setup() {
+        this.preset()
         this.initEvent()
     }
+
     initEvent() {
 
     }
+
     setMode(mode: string) {
         this.current.contentEditable = mode
     }
+
     setContent(html) {
         this.current.innerHTML = html
     }
+
     add(node) {
-        this.current.appendChild(node)
+        this.current.append(node)
     }
 }
 
