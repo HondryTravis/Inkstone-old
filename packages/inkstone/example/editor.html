@@ -32,19 +32,7 @@
 </body>
 
 <script>
-  const ink = new Ink.InkStone()
 
-  ink.setup({
-    selector: '#inkstone',
-    plugins: ['test']
-  }).create().render()
-  document.querySelector('#test').onclick = function() {
-    const range = ink.editor.selection.getActiveRange()
-    console.log(ink.editor.utils.getEffectivelyContainedNodes(range))
-  }
-  document.querySelector('#bold').onclick = function() {
-    ink.editor.execCommand('bold')
-  }
 </script>
 
 </html>

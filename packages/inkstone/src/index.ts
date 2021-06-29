@@ -1,10 +1,1 @@
-
-import InkStone from './Inkstone'
-
-if (window) {
-    window.InkStone = InkStone
-}
-
-export {
-    InkStone
-}
+console.log(2222)
